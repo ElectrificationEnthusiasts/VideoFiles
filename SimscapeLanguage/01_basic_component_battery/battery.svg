@@ -1,0 +1,10 @@
+<svg width="12" height="20" viewBox="6 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Battery Body -->
+  <rect x="6" y="2" width="12" height="18" rx="2" ry="2" fill="none" stroke="black" stroke-width="2"/>
+  
+  <!-- Battery Tip -->
+  <rect x="10" y="0" width="4" height="2" fill="black"/>
+  
+  <!-- Battery Charge Level -->
+  <rect x="8" y="8" width="8" height="10" fill="green"/>
+</svg>

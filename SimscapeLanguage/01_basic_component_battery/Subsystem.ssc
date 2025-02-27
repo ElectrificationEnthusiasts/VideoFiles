@@ -1,0 +1,22 @@
+% This component was automatically generated using 'subsystem2ssc'. 
+%   Subsystem: untitled/Subsystem 
+%   MATLAB version: 24.1 
+%   Simulink version: 24.1 
+%   Simscape version: 24.1 
+%   Generated on: 23-Aug-2024 11:15:48
+
+component (Propagation = blocks) Subsystem
+  nodes
+    Conn2 = foundation.electrical.electrical;
+    Conn1 = foundation.electrical.electrical;
+  end
+  components(ExternalAccess = observe)
+    Voltage_Source = ee.sources.voltage_source(ac_frequency = {60, 'Hz'}, ac_shift = {0, 'rad'}, ac_voltage = {0, 'V'}, dc_voltage = {0, 'V'}, noise_mode = int32(0));
+    Resistor = foundation.electrical.elements.resistor(R = {1, 'Ohm'});
+  end
+  connections
+    connect(Conn1,Voltage_Source.n);
+    connect(Resistor.p,Voltage_Source.p);
+    connect(Conn2,Resistor.n);
+  end
+end

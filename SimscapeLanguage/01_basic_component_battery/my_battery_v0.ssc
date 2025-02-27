@@ -1,0 +1,28 @@
+component my_battery_v0
+% My Battery
+% Basic custom battery for learning simscape language
+
+parameters
+    nominal_voltage = {10, 'V'}; % Nominal Battery Voltage
+end
+
+nodes
+    p = foundation.electrical.electrical; % +:top
+    n = foundation.electrical.electrical; % -:bottom
+end
+
+variables
+    i = { 0, 'A' }; % Current
+    v = { 0, 'V' }; % Voltage
+end
+
+branches
+    i : p.i -> n.i;
+end
+
+equations
+    v == p.v-n.v;
+    v == nominal_voltage;
+end
+
+end

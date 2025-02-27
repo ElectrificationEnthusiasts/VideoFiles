@@ -1,0 +1,59 @@
+component my_battery
+% My Battery
+% Basic custom battery for learning simscape language
+
+parameters
+    nominal_voltage = {10, 'V'}; % Nominal Battery Voltage
+    AH_rating = {5, 'A*hr'};
+    terminal_resistance = {0.02, 'Ohm'}; % Terminal Resistance
+    voltage_data = {[0 1 9 10 11],'V'};
+    SOC_data = [0 0.05 0.2 0.95 1];
+end
+
+nodes
+    p = foundation.electrical.electrical; % +
+    n = foundation.electrical.electrical; % -
+end
+
+nodes (ExternalAccess=none)
+    p_internal = foundation.electrical.electrical;
+end
+
+outputs
+    SOC_out;    % SOC
+end
+
+annotations
+    [p] : Side = top;
+    [n] : Side = bottom;
+    [SOC_out] : Side = left;
+    Icon = 'battery.svg';
+end
+
+components
+    terminal_resistor = foundation.electrical.elements.resistor(R = terminal_resistance);
+end
+
+connections
+    connect(p, terminal_resistor.p);
+    connect(p_internal, terminal_resistor.n);
+end
+
+variables
+    i = { 0, 'A' }; % Current
+    v = { 0, 'V' }; % Voltage
+    SOC = {1, '1'};
+end
+
+branches
+    i : p_internal.i -> n.i;
+end
+
+equations
+    v == p_internal.v-n.v;
+    v == tablelookup(SOC_data,voltage_data,SOC);
+    SOC.der == v * i/(nominal_voltage*AH_rating)
+    SOC_out == SOC;
+end
+
+end

@@ -1,0 +1,61 @@
+component example_battery 
+% Example Battery
+% this is a basic battery building block
+
+parameters
+    v0 = { 1, 'V' }; % Nominal Voltage
+    terminal_resistance = {0.02, 'Ohm'};
+    AH_rating = {5, 'A*hr'};
+    voltage_data = {[0, 10],'V'};
+    SOC_data = [0, 1];
+end
+
+outputs
+    SOC_out;    % S
+end
+
+nodes
+    p = foundation.electrical.electrical; % +
+    n = foundation.electrical.electrical; % - 
+end
+
+nodes (ExternalAccess = none)
+    p_internal = foundation.electrical.electrical;
+end
+
+annotations
+    [p] : Side = top;
+    [n] : Side = bottom;
+    [SOC_out] : Side = left;
+    Icon = 'battery.svg';
+end
+
+
+
+variables
+    i = { 0, 'A' }; % Current
+    v = { 0, 'V' }; % Voltage
+    SOC = {1, '1'}; % SOC
+end
+
+branches
+    i : p_internal.i -> n.i;
+end
+
+equations
+    v == p_internal.v - n.v;
+    v == tablelookup(SOC_data,voltage_data,SOC);
+    SOC_out == SOC;
+    SOC.der == v*i/(v0*AH_rating);
+end
+
+components(ExternalAccess = observe)
+    Resistor = foundation.electrical.elements.resistor(R = terminal_resistance);
+end
+
+connections
+    connect(Resistor.p,p);
+    connect(p_internal,Resistor.n);
+end
+
+end

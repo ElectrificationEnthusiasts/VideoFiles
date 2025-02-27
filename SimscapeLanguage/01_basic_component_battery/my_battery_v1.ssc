@@ -1,0 +1,42 @@
+component my_battery_v1
+% My Battery
+% Basic custom battery for learning simscape language
+
+parameters
+    nominal_voltage = {10, 'V'}; % Nominal Battery Voltage
+    terminal_resistance = {0.02, 'Ohm'}; % Terminal Resistance
+end
+
+nodes
+    p = foundation.electrical.electrical; % +:top
+    n = foundation.electrical.electrical; % -:bottom
+end
+
+nodes (ExternalAccess=none)
+    p_internal = foundation.electrical.electrical;
+end
+
+components (ExternalAccess=observe)
+    terminal_resistor = foundation.electrical.elements.resistor(R = terminal_resistance);
+end
+
+connections
+    connect(p, terminal_resistor.p);
+    connect(p_internal, terminal_resistor.n);
+end
+
+variables
+    i = { 0, 'A' }; % Current
+    v = { 0, 'V' }; % Voltage
+end
+
+branches
+    i : p_internal.i -> n.i;
+end
+
+equations
+    v == p_internal.v-n.v;
+    v == nominal_voltage;
+end
+
+end
